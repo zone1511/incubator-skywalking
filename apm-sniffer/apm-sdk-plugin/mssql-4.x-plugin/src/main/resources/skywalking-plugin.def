@@ -1,0 +1,5 @@
+mssql-4.x=org.apache.skywalking.apm.plugin.jdbc.mssql.define.CallableInstrumentation
+mssql-4.x=org.apache.skywalking.apm.plugin.jdbc.mssql.define.ConnectionInstrumentation
+mssql-4.x=org.apache.skywalking.apm.plugin.jdbc.mssql.define.DriverInstrumentation
+mssql-4.x=org.apache.skywalking.apm.plugin.jdbc.mssql.define.PreparedStatementInstrumentation
+mssql-4.x=org.apache.skywalking.apm.plugin.jdbc.mssql.define.StatementInstrumentation

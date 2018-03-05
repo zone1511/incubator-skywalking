@@ -16,7 +16,6 @@
  *
  */
 
-
 package org.apache.skywalking.apm.plugin.jdbc.connectionurl.parser;
 
 import org.apache.skywalking.apm.plugin.jdbc.trace.ConnectionInfo;
@@ -33,6 +32,7 @@ public class URLParser {
     private static final String ORACLE_JDBC_URL_PREFIX = "jdbc:oracle";
     private static final String H2_JDBC_URL_PREFIX = "jdbc:h2";
     private static final String POSTGRESQL_JDBC_URL_PREFIX = "jdbc:postgresql";
+    private static final String MSSQL_JDBC_URL_PREFIX = "jdbc:sqlserver://";
 
     public static ConnectionInfo parser(String url) {
         ConnectionURLParser parser = null;
@@ -44,6 +44,11 @@ public class URLParser {
             parser = new H2URLParser(url);
         } else if (url.startsWith(POSTGRESQL_JDBC_URL_PREFIX)) {
             parser = new PostgreSQLURLParser(url);
+        } else if (url.startsWith(MSSQL_JDBC_URL_PREFIX)) {
+            parser = new MssqlURLParser(url);
+        }
+        if (parser == null) {
+            return null;
         }
         return parser.parse();
     }
