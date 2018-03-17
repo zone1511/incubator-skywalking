@@ -38,8 +38,8 @@
     <dependencies>
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <version>6.4.0.jre8</version>
+            <artifactId>sqljdbc4</artifactId>
+            <version>4.0</version>
             <scope>test</scope>
         </dependency>
 

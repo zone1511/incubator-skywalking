@@ -23,7 +23,7 @@ import org.apache.skywalking.apm.plugin.jdbc.trace.ConnectionInfo;
 
 public class MssqlURLParser extends AbstractURLParser {
     private static final int DEFAULT_PORT = 1433;
-    private static final String DB_TYPE = "Mssql";
+    public static final String DB_TYPE = "Mssql";
     private static final String PROTOCOL_PREFIX = "jdbc:sqlserver://";
     private static final String DEFAULT_HOST = "127.0.0.1";
 

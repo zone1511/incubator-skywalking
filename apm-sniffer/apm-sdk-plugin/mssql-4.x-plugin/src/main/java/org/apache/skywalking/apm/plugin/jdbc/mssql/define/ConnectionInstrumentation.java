@@ -27,7 +27,6 @@ import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
 import org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
-import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
 import static org.apache.skywalking.apm.plugin.jdbc.define.Constants.CLOSE_METHOD_NAME;
 import static org.apache.skywalking.apm.plugin.jdbc.define.Constants.COMMIT_METHOD_NAME;
 import static org.apache.skywalking.apm.plugin.jdbc.define.Constants.CREATE_STATEMENT_METHOD_NAME;
@@ -58,9 +57,7 @@ public class ConnectionInstrumentation extends ClassInstanceMethodsEnhancePlugin
         return new InstanceMethodsInterceptPoint[] {
             new InstanceMethodsInterceptPoint() {
                 @Override public ElementMatcher<MethodDescription> getMethodsMatcher() {
-                    return named(PREPARE_STATEMENT_METHOD_NAME).and(takesArguments(3))
-                        .or(named(PREPARE_STATEMENT_METHOD_NAME).and(takesArguments(4)))
-                        .or(named(PREPARE_STATEMENT_METHOD_NAME).and(takesArguments(5)));
+                    return named(PREPARE_STATEMENT_METHOD_NAME);
                 }
 
                 @Override public String getMethodsInterceptor() {
@@ -87,9 +84,7 @@ public class ConnectionInstrumentation extends ClassInstanceMethodsEnhancePlugin
             new InstanceMethodsInterceptPoint() {
                 @Override public ElementMatcher<MethodDescription> getMethodsMatcher() {
                     return
-                        named(CREATE_STATEMENT_METHOD_NAME).and(takesArguments(2))
-                            .or(named(CREATE_STATEMENT_METHOD_NAME).and(takesArguments(4))
-                            );
+                        named(CREATE_STATEMENT_METHOD_NAME);
                 }
 
                 @Override public String getMethodsInterceptor() {
@@ -118,6 +113,6 @@ public class ConnectionInstrumentation extends ClassInstanceMethodsEnhancePlugin
     }
 
     @Override protected ClassMatch enhanceClass() {
-        return MultiClassNameMatch.byMultiClassMatch("com.microsoft.sqlserver.jdbc.SQLServerConnection", "com.microsoft.sqlserver.jdbc.SQLServerConnectionPoolProxy");
+        return MultiClassNameMatch.byMultiClassMatch("com.microsoft.sqlserver.jdbc.SQLServerConnection");
     }
 }

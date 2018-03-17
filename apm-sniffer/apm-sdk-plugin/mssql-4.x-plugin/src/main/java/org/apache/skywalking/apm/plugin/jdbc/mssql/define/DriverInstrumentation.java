@@ -16,22 +16,55 @@
  *
  */
 
-
 package org.apache.skywalking.apm.plugin.jdbc.mssql.define;
 
+import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.matcher.ElementMatcher;
+import org.apache.skywalking.apm.agent.core.plugin.interceptor.ConstructorInterceptPoint;
+import org.apache.skywalking.apm.agent.core.plugin.interceptor.InstanceMethodsInterceptPoint;
+import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.ClassInstanceMethodsEnhancePluginDefine;
 import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
-import org.apache.skywalking.apm.agent.core.plugin.match.NameMatch;
-import org.apache.skywalking.apm.plugin.jdbc.define.AbstractDriverInstrumentation;
+import org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch;
+
+import static net.bytebuddy.matcher.ElementMatchers.named;
 
 /**
  * {@link DriverInstrumentation} presents that skywalking intercepts {@link com.microsoft.sqlserver.jdbc.SQLServerDriver}.
  *
  * @author zone1511
  */
-public class DriverInstrumentation extends AbstractDriverInstrumentation {
+public class DriverInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
+
+    private static final String DRIVER_INTERCEPT_CLASS = "org.apache.skywalking.apm.plugin.jdbc.mssql.JDBCDriverInterceptor";
 
     @Override
     protected ClassMatch enhanceClass() {
-        return NameMatch.byName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        return MultiClassNameMatch.byMultiClassMatch("com.microsoft.sqlserver.jdbc.SQLServerDriver", "com.microsoft.sqlserver.jdbc.SQLServerConnection");
+    }
+
+    @Override
+    protected final ConstructorInterceptPoint[] getConstructorsInterceptPoints() {
+        return new ConstructorInterceptPoint[0];
+    }
+
+    @Override
+    protected final InstanceMethodsInterceptPoint[] getInstanceMethodsInterceptPoints() {
+        return new InstanceMethodsInterceptPoint[] {
+            new InstanceMethodsInterceptPoint() {
+                @Override
+                public ElementMatcher<MethodDescription> getMethodsMatcher() {
+                    return named("connect");
+                }
+
+                @Override
+                public String getMethodsInterceptor() {
+                    return DRIVER_INTERCEPT_CLASS;
+                }
+
+                @Override public boolean isOverrideArgs() {
+                    return false;
+                }
+            }
+        };
     }
 }
